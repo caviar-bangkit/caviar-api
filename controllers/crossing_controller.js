@@ -43,8 +43,67 @@ const getNearestCrossings = async (req, res) => {
   }
 };
 
+//Create crossing
+const createCrossing = async (req, res) => {
+  try {
+  const crossings = await prisma.crossings.createMany({
+      data: {
+        id: ' ',
+        name: ' ',
+        latitude: ' ',
+        longtitude: ' ',
+        heading: '  ',
+        created: '  ',
+      },
+    });
+    res.json(crossings);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+//Update crossing
+const updateCrossing = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const crossing = await prisma.crossing.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        name: ' ',
+        latitude: ' ',
+        longtitude: ' ',
+        heading: '  ',
+        created: '  ',
+      },
+    });
+    res.json(crossing);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+//Delete crossing
+const deleteCrossing = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const crossing = await prisma.crossing.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+    res.json(crossing);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getAllsCrossing,
   getCrossing,
   getNearestCrossings,
+  createCrossing,
+  updateCrossing,
+  deleteCrossing,
 };
