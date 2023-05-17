@@ -15,3 +15,36 @@ model Crossing {
   heading   Float
   created   DateTime @default(now())
 }
+
+//android dev
+model traffic {
+  id                          Int      @id @default(autoincrement())
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
+  name                        String
+  address                     String
+  latitude                    Int
+  longtitude                  Int
+  vehiclesDensityInMinutes    Int
+}
+
+//android dev
+model intersections {
+  id                          Int      @id @default(autoincrement())
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
+  trafficId                   String
+  address                     String
+  latitude                    Int
+  longtitude                  Int
+  currentStatus               Int
+}
+
+//add API key to allow access Rest API
+model api_keys {
+  id                          Int      @id @default(autoincrement())
+  createdAt                   DateTime @default(now())
+  updatedAt                   DateTime @updatedAt
+  key                         String
+  status                      Boolean
+}
