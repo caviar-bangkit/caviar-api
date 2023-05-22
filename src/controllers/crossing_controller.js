@@ -1,4 +1,4 @@
-const prisma = require("../src/connection");
+const prisma = require("../connection");
 
 // Get all crossings
 const getAllsCrossing = async (req, res) => {
@@ -46,17 +46,16 @@ const getNearestCrossings = async (req, res) => {
 //Create crossing
 const createCrossing = async (req, res) => {
   try {
-  const crossings = await prisma.crossings.createMany({
+    const { name, latitude, longitude, heading } = req.body;
+    const crossing = await prisma.crossing.create({
       data: {
-        id: ' ',
-        name: ' ',
-        latitude: ' ',
-        longtitude: ' ',
-        heading: '  ',
-        created: '  ',
+        name,
+        latitude,
+        longitude,
+        heading,
       },
     });
-    res.json(crossings);
+    res.json(crossing);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -66,16 +65,16 @@ const createCrossing = async (req, res) => {
 const updateCrossing = async (req, res) => {
   try {
     const { id } = req.params;
+    const { name, latitude, longitude, heading } = req.body;
     const crossing = await prisma.crossing.update({
       where: {
         id: Number(id),
       },
       data: {
-        name: ' ',
-        latitude: ' ',
-        longtitude: ' ',
-        heading: '  ',
-        created: '  ',
+        name,
+        latitude,
+        longitude,
+        heading,
       },
     });
     res.json(crossing);

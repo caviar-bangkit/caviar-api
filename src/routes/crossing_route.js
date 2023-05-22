@@ -10,10 +10,9 @@ const {
 
 router.get("/crossings", getAllsCrossing);
 router.get("/crossings/:id", getCrossing);
-router.post("/getNearestCrossings", getNearestCrossings);
-router.post("/createCrossing/:id", createCrossing);
-router.post("/updateCrossing/:id", updateCrossing);
-router.delete("/deleteCrossing/:id", deleteCrossing);
-
+router.get("/crossings/nearest/:latitude/:longtitude", getNearestCrossings);
+router.post("/crossings", createCrossing);
+router.put("/crossings/:id", updateCrossing);
+router.delete("/crossings/:id", deleteCrossing);
 
 module.exports = router;

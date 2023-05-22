@@ -4,7 +4,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "seed": "node src/prisma/seed.js"
   },
   "dependencies": {
     "@prisma/client": "^4.14.0",
@@ -15,5 +16,8 @@
     "eslint": "^8.40.0",
     "nodemon": "^2.0.22",
     "prisma": "^4.14.0"
+  },
+  "prisma": {
+    "schema": "src/prisma/schema.prisma"
   }
 }

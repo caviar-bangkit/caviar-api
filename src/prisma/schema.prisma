@@ -1,0 +1,18 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = "mysql://root:090202@127.0.0.1:3307/caviar-db"
+}
+
+model Crossing {
+  id        Int      @id @default(autoincrement())
+  name      String
+  latitude  Float
+  longitude Float
+  heading   Float
+  created   DateTime @default(now())
+  updated   DateTime @updatedAt @default(now())
+}
