@@ -40,6 +40,14 @@ Connect to the database using the following command:
 npx prisma migrate dev --name init
 ```
 
+After migrating the database, you have to seed the database with the following command:
+
+- This command will seed the database with the data from the data.json file on the prisma folder.
+
+```bash
+npm run seed
+```
+
 ### 4. Running the API
 
 Run the API using the following command:
@@ -62,4 +70,14 @@ Run the Prisma Studio using the following command:
 
 ```bash
 npx prisma studio
+```
+
+Check the Prisma Studio on http://localhost:5555 on your browser. And you can use the Prisma Studio to manage the database.
+
+### Bulk Addition of Crossings Data
+
+To add crossings data in bulk, you can edit the data.json file on the prisma folder and seed the database again using the following command:
+
+```bash
+npm run seed
 ```
