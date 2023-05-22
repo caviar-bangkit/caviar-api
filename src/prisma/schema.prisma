@@ -8,11 +8,11 @@ datasource db {
 }
 
 model Crossing {
-  id        Int      @id @default(autoincrement())
-  name      String
+  id        Int      @id @unique @default(autoincrement())
+  name      String   @unique
   latitude  Float
   longitude Float
   heading   Float
   created   DateTime @default(now())
-  updated   DateTime @updatedAt @default(now())
+  updated   DateTime @default(now()) @updatedAt
 }

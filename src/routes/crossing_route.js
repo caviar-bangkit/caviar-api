@@ -1,4 +1,5 @@
-const router = require("express").Router();
+const express = require("express");
+const router = express.Router();
 const {
   getAllsCrossing,
   getCrossing,
@@ -9,13 +10,13 @@ const {
 } = require("../controllers/crossing_controller");
 
 router.get("/crossings", getAllsCrossing);
-router.get("/crossings/:id", getCrossing);
+router.get("/crossing/:id", getCrossing);
 router.get(
-  "/crossings/nearest?latitude=:latitude&longitude=:longitude",
+  "/crossing/nearest/:radius/:latitude/:longitude",
   getNearestCrossings
 );
-router.post("/crossings", createCrossing);
-router.put("/crossings/:id", updateCrossing);
-router.delete("/crossings/:id", deleteCrossing);
+router.post("/crossing", createCrossing);
+router.put("/crossing/:id", updateCrossing);
+router.delete("/crossing/:id", deleteCrossing);
 
 module.exports = router;
