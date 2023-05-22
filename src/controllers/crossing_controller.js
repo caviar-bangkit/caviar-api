@@ -1,4 +1,4 @@
-const prisma = require("../connection");
+const prisma = require("../prisma/connection");
 
 // Get all crossings
 const getAllsCrossing = async (req, res) => {

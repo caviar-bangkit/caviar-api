@@ -1,4 +1,4 @@
-const prisma = require("../connection");
+const prisma = require("./connection");
 const crossings = require("./data.json");
 
 const seed = async () => {
