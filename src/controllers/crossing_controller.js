@@ -49,6 +49,7 @@ const getNearestCrossings = async (req, res) => {
       res.json(
         crossings.map((crossing) => {
           return {
+            name: crossing.name,
             latitude: crossing.latitude,
             longitude: crossing.longitude,
             "distance based on earth radius (km)": crossing.distance,
