@@ -10,11 +10,8 @@ const {
 } = require("../controllers/crossing_controller");
 
 router.get("/crossings", getAllsCrossing);
-router.get("/crossing/:id", getCrossing);
-router.get(
-  "/crossing/nearest/:radius/:latitude/:longitude",
-  getNearestCrossings
-);
+router.get("/crossings/:id", getCrossing);
+router.get("/crossing/nearest", getNearestCrossings);
 router.post("/crossing", createCrossing);
 router.put("/crossing/:id", updateCrossing);
 router.delete("/crossing/:id", deleteCrossing);
