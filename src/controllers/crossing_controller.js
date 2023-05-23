@@ -36,7 +36,14 @@ const getCrossing = async (req, res) => {
 // Get nearest crossings by lat and lng params using earth radius formula
 const getNearestCrossings = async (req, res) => {
   try {
-    const { radius: radius, latitude: lat, longitude: lng } = req.params;
+    const { latitude: lat, longitude: lng, radius } = req.query;
+    // check params
+    if (lat === undefined || lng === undefined || radius === undefined) {
+      res.status(400).json({
+        error: "Please provide latitude, longitude, and radius",
+      });
+      return;
+    }
     const earthRadius = 6371; // earth radius in km
     const crossings = await prisma.$queryRaw`
       SELECT *, (${earthRadius} * acos(cos(radians(${lat})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${lng})) + sin(radians(${lat})) * sin(radians(latitude)))) AS distance
@@ -46,16 +53,7 @@ const getNearestCrossings = async (req, res) => {
       LIMIT 1
     `;
     if (crossings.length !== 0) {
-      res.json(
-        crossings.map((crossing) => {
-          return {
-            name: crossing.name,
-            latitude: crossing.latitude,
-            longitude: crossing.longitude,
-            "distance based on earth radius (km)": crossing.distance,
-          };
-        })
-      );
+      res.json(crossings);
       return;
     }
     res.status(404).json({ error: `No crossings found within ${radius} km` });
