@@ -1,14 +1,14 @@
 const prisma = require("../prisma/connection");
-
+const Response = require("../helper/Response");
+const StatusCode = require("../helper/StatusCode");
 // Get all crossings
 const getAllsCrossing = async (req, res) => {
   try {
     const crossings = await prisma.crossing.findMany();
-    res.json(crossings);
-    return;
+    return Response.success(res,"Data success fetch", crossings);
+    
   } catch (error) {
-    res.status(500).json({ error: error.message });
-    return;
+    return Response.error(res,"Error on fetch",StatusCode.INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -22,14 +22,12 @@ const getCrossing = async (req, res) => {
       },
     });
     if (crossing !== null) {
-      res.json(crossing);
-      return;
+      return Response.success(res,`Data success fetch by id ${id}`, crossings);
+      
     }
-    res.status(404).json({ error: `Crossing with id ${id} not found` });
-    return;
+    return Response.error(res,`Crossing with id ${id} not found`,StatusCode.NOT_FOUND);
   } catch (error) {
-    res.status(500).json({ error: error.message });
-    return;
+    return Response.error(res,"Error on fetch", StatusCode.INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -39,11 +37,11 @@ const getNearestCrossings = async (req, res) => {
     const { latitude: lat, longitude: lng, radius } = req.query;
     // check params
     if (lat === undefined || lng === undefined || radius === undefined) {
-      res.status(400).json({
-        error: "Please provide latitude, longitude, and radius",
-      });
-      return;
+      return Response.error(res,"Please provide latitude, longitude, and radius",StatusCode.INTERNAL_SERVER_ERROR);
     }
+
+
+
     const earthRadius = 6371; // earth radius in km
     const crossings = await prisma.$queryRaw`
       SELECT *, (${earthRadius} * acos(cos(radians(${lat})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${lng})) + sin(radians(${lat})) * sin(radians(latitude)))) AS distance
@@ -53,14 +51,12 @@ const getNearestCrossings = async (req, res) => {
       LIMIT 1
     `;
     if (crossings.length !== 0) {
-      res.json(crossings);
-      return;
+      return Response.success(res,`Founding traffic light nearby`, crossings[0]);
     }
-    res.status(404).json({ error: `No crossings found within ${radius} km` });
-    return;
+
+    return Response.error(res,"No traffic light nearby",StatusCode.NOT_FOUND);
   } catch (error) {
-    res.status(500).json({ error: error.message });
-    return;
+    return Response.error(res,"Error on fetch",StatusCode.INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -75,8 +71,7 @@ const createCrossing = async (req, res) => {
       },
     });
     if (crossingDuplicate !== null) {
-      res.status(400).json({ error: `Crossing ${name} already exists` });
-      return;
+      return Response.error(res,`Crossing with name ${name} already exists`,StatusCode.CONFLICT);
     }
     // check params
     if (
@@ -85,10 +80,7 @@ const createCrossing = async (req, res) => {
       longitude === undefined ||
       heading === undefined
     ) {
-      res.status(400).json({
-        error: "Please provide name, latitude, longitude, and heading",
-      });
-      return;
+      return Response.error(res,"Please provide name, latitude, longitude, and heading",StatusCode.BAD_REQUEST);
     }
     const crossing = await prisma.crossing.create({
       data: {
@@ -98,11 +90,9 @@ const createCrossing = async (req, res) => {
         heading,
       },
     });
-    res.json(crossing);
-    return;
+    return Response.success(res,"Crossing created successfully", crossing);
   } catch (error) {
-    res.status(500).json({ error: error.message });
-    return;
+    return Response.error(res,"Error on fetch",StatusCode.INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -118,10 +108,7 @@ const updateCrossing = async (req, res) => {
       longitude === undefined ||
       heading === undefined
     ) {
-      res.status(400).json({
-        error: "Please provide name, latitude, longitude, and heading",
-      });
-      return;
+      return Response.error(res,"Please provide name, latitude, longitude, and heading",StatusCode.BAD_REQUEST);
     }
     const crossing = await prisma.crossing.update({
       where: {
@@ -134,11 +121,13 @@ const updateCrossing = async (req, res) => {
         heading,
       },
     });
-    res.json(crossing);
-    return;
+    if (crossing !== null) {
+      return Response.success(res,`Crossing with id ${id} has been updated successfully`, crossing);
+    }else{
+      return Response.error(res,`Cannot update crossing with id ${id}, crossing not found`,StatusCode.NOT_FOUND);
+    }
   } catch (error) {
-    res.status(500).json({ error: error.message });
-    return;
+    return Response.error(res,"Error on fetch",StatusCode.INTERNAL_SERVER_ERROR);
   }
 };
 
@@ -152,16 +141,11 @@ const deleteCrossing = async (req, res) => {
       },
     });
     if (crossing !== null) {
-      res.json(`Crossing with id ${id} has been deleted successfully`);
-      return;
+      return Response.success(res,`Crossing with id ${id} has been deleted successfully`, crossing);
     }
-    res.status(404).json({
-      error: `Cannot delete crossing with id ${id}, crossing not found`,
-    });
-    return;
+    return Response.error(res,`Cannot delete crossing with id ${id}, crossing not found`,StatusCode.NOT_FOUND);
   } catch (error) {
-    res.status(500).json({ error: error.message });
-    return;
+    return Response.error(res,"Error on fetch",StatusCode.INTERNAL_SERVER_ERROR);
   }
 };
 
