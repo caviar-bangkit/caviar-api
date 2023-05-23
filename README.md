@@ -8,6 +8,11 @@ CAVIAR (Crosswalk Assistance App for the Visually Impaired Peoples) are an appli
 
 This repository contains the source code for the CAVIAR API. The API is built using Node.js, Express.js, MySQL and Prisma ORM.
 
+## Prerequisites
+
+- Node.js installed on your machine
+- Docker installed on your machine
+
 ### 1. Installing the Dependencies
 
 Install npm dependencies using the following command:
