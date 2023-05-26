@@ -22,12 +22,13 @@ RUN echo $CLIENT_KEY
 # Check if SERVER_CA is set
 RUN echo $SERVER_CA
 
-# Copy connect.sh to the container image.
-COPY connect.sh ./
+# Create .pem from env variables
+RUN echo $CLIENT_CERT > client-cert.pem
+RUN echo $CLIENT_KEY > client-key.pem
+RUN echo $SERVER_CA > server-ca.pem
 
-# Run connect.sh
-RUN chmod +x ./connect.sh
-RUN ./connect.sh
+# Run openssl command
+RUN openssl pkcs12 -export -out client-identity.p12 -inkey client-key.pem -in client-cert.pem -password pass:090202
 
 # Check if .pem file exists
 RUN ls -la
