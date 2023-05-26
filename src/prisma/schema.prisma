@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = "mysql://root:090202@127.0.0.1:3308/caviar-db"
+  url      = env("DATABASE_URL")
 }
 
 model Crossing {
