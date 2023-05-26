@@ -10,42 +10,8 @@ COPY package*.json ./
 # Install production dependencies.
 RUN npm install --only=production
 
-# Check if DATABASE_URL is set
-RUN echo $DATABASE_URL
-
-# Check if CLIENT_CERT is set
-RUN echo $CLIENT_CERT
-
-# Check if CLIENT_KEY is set
-RUN echo $CLIENT_KEY
-
-# Check if SERVER_CA is set
-RUN echo $SERVER_CA
-
-# Create .pem from env variables
-RUN echo "$CLIENT_CERT" > client-cert.pem
-RUN echo "$CLIENT_KEY" > client-key.pem
-RUN echo "$SERVER_CA" > server-ca.pem
-
-# Copy all the .pem files to the container
-COPY client-cert.pem ./
-COPY client-key.pem ./
-COPY server-ca.pem ./
-
-# Install openssl
-RUN apt-get update && apt-get install -y openssl
-
-# Run openssl command
-RUN openssl pkcs12 -export -out client-identity.p12 -inkey client-key.pem -in client-cert.pem -password pass:090202
-
-# Check if .pem file exists
-RUN ls -la
-
 # Copy local code to the container image.
 COPY . ./
-
-# Check the files in the container
-RUN ls -la
 
 # Generate the prisma client
 RUN npx prisma generate
