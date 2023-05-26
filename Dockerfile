@@ -27,6 +27,9 @@ RUN echo $CLIENT_CERT > client-cert.pem
 RUN echo $CLIENT_KEY > client-key.pem
 RUN echo $SERVER_CA > server-ca.pem
 
+# Install openssl
+RUN apt-get update && apt-get install -y openssl
+
 # Run openssl command
 RUN openssl pkcs12 -export -out client-identity.p12 -inkey client-key.pem -in client-cert.pem -password pass:090202
 
