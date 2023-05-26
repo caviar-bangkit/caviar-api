@@ -13,11 +13,13 @@ RUN npm install --only=production
 # Copy local code to the container image.
 COPY . ./
 
+# 
+
 # Generate the prisma client
 RUN npx prisma generate
 
 # Run the prisma migration
-RUN npx prisma migrate dev --name init
+RUN npx prisma migrate deploy
 
 # Run database seeding
 RUN npm run seed
