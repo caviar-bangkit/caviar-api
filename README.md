@@ -86,3 +86,7 @@ To add crossings data in bulk, you can edit the data.json file on the prisma fol
 ```bash
 npm run seed
 ```
+
+## API Documentation
+
+Postman Documentation: https://documenter.getpostman.com/view/24885247/2s93m4X3A1
