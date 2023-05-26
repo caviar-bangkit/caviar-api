@@ -23,9 +23,9 @@ RUN echo $CLIENT_KEY
 RUN echo $SERVER_CA
 
 # Create .pem from env variables
-RUN echo $CLIENT_CERT > client-cert.pem
-RUN echo $CLIENT_KEY > client-key.pem
-RUN echo $SERVER_CA > server-ca.pem
+RUN echo "$CLIENT_CERT" > client-cert.pem
+RUN echo "$CLIENT_KEY" > client-key.pem
+RUN echo "$SERVER_CA" > server-ca.pem
 
 # Copy all the .pem files to the container
 COPY client-cert.pem ./
