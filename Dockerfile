@@ -10,13 +10,21 @@ COPY package*.json ./
 # Install production dependencies.
 RUN npm install --only=production
 
-# Echo some ssl certificates from the environment variables into a .pem file
-RUN echo $CLIENT_CERT > client-cert.pem
-RUN echo $CLIENT_KEY > client-key.pem
-RUN echo $SERVER_CA > server-ca.pem
+# Run connect.sh
+RUN chmod +x ./connect.sh
+RUN ./connect.sh
+
+# Check if .pem file exists
+RUN ls -la
+
+# Check if DATABASE_URL env variable exists
+RUN echo $DATABASE_URL
 
 # Copy local code to the container image.
 COPY . ./
+
+# Check if .pem file exists
+RUN ls -la
 
 # Generate the prisma client
 RUN npx prisma generate
