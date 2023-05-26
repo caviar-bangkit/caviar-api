@@ -10,6 +10,9 @@ COPY package*.json ./
 # Install production dependencies.
 RUN npm install --only=production
 
+# Copy connect.sh to the container image.
+COPY connect.sh ./
+
 # Run connect.sh
 RUN chmod +x ./connect.sh
 RUN ./connect.sh
@@ -23,7 +26,7 @@ RUN echo $DATABASE_URL
 # Copy local code to the container image.
 COPY . ./
 
-# Check if .pem file exists
+# Check the files in the container
 RUN ls -la
 
 # Generate the prisma client
