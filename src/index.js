@@ -11,23 +11,6 @@ app.use(middleware.decodeToken);
 
 app.use("/api", CrossingRoute);
 
-app.get('/api/todos', (req, res) => {
-	console.log(req.user);
-	return res.json({
-		todos: [
-			{
-				title: 'Task1',
-			},
-			{
-				title: 'Task2',
-			},
-			{
-				title: 'Task3',
-			},
-		],
-	});
-});
-
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the CAVIAR API" });
 });

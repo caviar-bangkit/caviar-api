@@ -1,22 +1,22 @@
-import './App.css';
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth';
-import 'firebase/compat/firestore';
-import { useState, useEffect } from 'react';
-import ListOfTodo from './components/ListOfTodo'
+import "./App.css";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
+import { useState, useEffect } from "react";
+import ListOfCrossing from "./components/ListOfCrossings";
 
 function App() {
   const [auth, setAuth] = useState(
-    false || window.localStorage.getItem('auth') === 'true'
+    false || window.localStorage.getItem("auth") === "true"
   );
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState("");
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((userCred)=>{
+    firebase.auth().onAuthStateChanged((userCred) => {
       if (userCred) {
         setAuth(true);
-        window.localStorage.setItem('auth', 'true');
-        userCred.getIdToken().then((token)=>{
+        window.localStorage.setItem("auth", "true");
+        userCred.getIdToken().then((token) => {
           setToken(token);
         });
       }
@@ -30,7 +30,7 @@ function App() {
       .then((userCred) => {
         if (userCred) {
           setAuth(true);
-          window.localStorage.setItem('auth', 'true');
+          window.localStorage.setItem("auth", "true");
         }
       });
   };
@@ -38,10 +38,10 @@ function App() {
   return (
     <div className="App">
       {auth ? (
-        <ListOfTodo token={token}/>
+        <ListOfCrossing token={token} />
       ) : (
         <button onClick={loginWithGoogle}>Login with Google</button>
-      )}    
+      )}
     </div>
   );
 }
