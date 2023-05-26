@@ -7,11 +7,7 @@ import ListOfTodo from './components/ListOfTodo'
 
 function App() {
   const [auth, setAuth] = useState(
-<<<<<<< Updated upstream
-    false || window.localStorage.getItem('auth') == 'true'
-=======
     false || window.localStorage.getItem('auth') === 'true'
->>>>>>> Stashed changes
   );
   const [token, setToken] = useState('');
 
