@@ -27,6 +27,11 @@ RUN echo $CLIENT_CERT > client-cert.pem
 RUN echo $CLIENT_KEY > client-key.pem
 RUN echo $SERVER_CA > server-ca.pem
 
+# Copy all the .pem files to the container
+COPY client-cert.pem ./
+COPY client-key.pem ./
+COPY server-ca.pem ./
+
 # Install openssl
 RUN apt-get update && apt-get install -y openssl
 
