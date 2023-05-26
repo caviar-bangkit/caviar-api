@@ -10,6 +10,18 @@ COPY package*.json ./
 # Install production dependencies.
 RUN npm install --only=production
 
+# Check if DATABASE_URL is set
+RUN echo $DATABASE_URL
+
+# Check if CLIENT_CERT is set
+RUN echo $CLIENT_CERT
+
+# Check if CLIENT_KEY is set
+RUN echo $CLIENT_KEY
+
+# Check if SERVER_CA is set
+RUN echo $SERVER_CA
+
 # Copy connect.sh to the container image.
 COPY connect.sh ./
 
@@ -19,9 +31,6 @@ RUN ./connect.sh
 
 # Check if .pem file exists
 RUN ls -la
-
-# Check if DATABASE_URL env variable exists
-RUN echo $DATABASE_URL
 
 # Copy local code to the container image.
 COPY . ./
