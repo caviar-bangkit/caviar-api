@@ -1,6 +1,15 @@
 const firebase = require("firebase-admin");
 
-firebase.initializeApp();
+const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT;
+
+firebase.initializeApp({
+  credential: firebase.credential.cert(JSON.parse(serviceAccount)),
+});
+
+// if firebase admin is not initialized show error
+if (!firebase.apps.length) {
+  console.error("Firebase admin is not initialized");
+}
 
 class Middleware {
   async decodeToken(req, res, next) {

@@ -16,11 +16,8 @@ COPY . ./
 # Generate the prisma client
 RUN npx prisma generate
 
-# Run the prisma migration
-RUN npx prisma migrate deploy
-
-# Run database seeding
-RUN npm run seed
+# Expose port 3000
+EXPOSE 3000
 
 # Run the web service on container startup.
 CMD [ "npm", "run", "start" ]
