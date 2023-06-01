@@ -37,9 +37,7 @@ const getCrossing = async (req, res) => {
     const { id } = req.params;
     const pool = await poolPromise;
     const db = await pool.getConnection();
-    const crossing = await db.query("SELECT * FROM Crossing WHERE id = $1", [
-      id,
-    ]);
+    const crossing = await db.query(`SELECT * FROM Crossing WHERE id = ${id}`);
     db.release();
     if (crossing.length !== 0) {
       return Response.success(res, "Data success fetch", crossing[0]);
@@ -96,10 +94,8 @@ const createCrossing = async (req, res) => {
     const pool = await poolPromise;
     const db = await pool.getConnection();
     // check duplicate
-    const crossingDuplicate = await db.query(
-      "SELECT * FROM Crossing WHERE name = $1",
-      [name]
-    );
+    const crossingDuplicate = await db.query(`
+      SELECT * FROM Crossing WHERE name = ${name}`);
     if (crossingDuplicate !== null) {
       return Response.error(
         res,
@@ -120,10 +116,11 @@ const createCrossing = async (req, res) => {
         StatusCode.BAD_REQUEST
       );
     }
-    const crossing = await db.query(
-      "INSERT INTO Crossing (name, latitude, longitude, heading) VALUES ($1, $2, $3, $4) RETURNING *",
-      [name, latitude, longitude, heading]
-    );
+    const crossing = await db.query(`
+      INSERT INTO Crossing (name, latitude, longitude, heading)
+        VALUES (${name}, ${latitude}, ${longitude}, ${heading})
+        RETURNING *
+        `);
     db.release();
     return Response.success(res, "Crossing created successfully", crossing);
   } catch (error) {
@@ -151,10 +148,12 @@ const updateCrossing = async (req, res) => {
         StatusCode.BAD_REQUEST
       );
     }
-    const crossing = await db.query(
-      "UPDATE Crossing SET name = $1, latitude = $2, longitude = $3, heading = $4 WHERE id = $5 RETURNING *",
-      [name, latitude, longitude, heading, id]
-    );
+    const crossing = await db.query(`
+      UPDATE Crossing
+      SET name = ${name}, latitude = ${latitude}, longitude = ${longitude}, heading = ${heading}
+      WHERE id = ${id}
+      RETURNING *
+      `);
     db.release();
     if (crossing !== null) {
       return Response.success(
@@ -180,10 +179,11 @@ const deleteCrossing = async (req, res) => {
     const { id } = req.params;
     const pool = await poolPromise;
     const db = await pool.getConnection();
-    const crossing = await db.query(
-      "DELETE FROM Crossing WHERE id = $1 RETURNING *",
-      [id]
-    );
+    const crossing = await db.query(`
+      DELETE FROM Crossing
+      WHERE id = ${id}
+      RETURNING *
+      `);
     db.release();
     if (crossing !== null) {
       return Response.success(
