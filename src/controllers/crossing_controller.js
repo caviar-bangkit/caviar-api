@@ -116,11 +116,12 @@ const createCrossing = async (req, res) => {
         StatusCode.BAD_REQUEST
       );
     }
-    const crossing = await db.query(`
-      INSERT INTO Crossing (name, latitude, longitude, heading)
-        VALUES (${name}, ${latitude}, ${longitude}, ${heading})
-        RETURNING *
-        `);
+    const crossing = await db.query("INSERT INTO Crossing SET ?", {
+      name,
+      latitude,
+      longitude,
+      heading,
+    });
     db.release();
     return Response.success(res, "Crossing created successfully", crossing);
   } catch (error) {
