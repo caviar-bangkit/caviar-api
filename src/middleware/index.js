@@ -3,7 +3,7 @@ const firebase = require("firebase-admin");
 const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT;
 
 firebase.initializeApp({
-  credential: firebase.credential.cert(JSON.parse(serviceAccount)),
+  credential: firebase.credential.cert(serviceAccount),
 });
 
 // if firebase admin is not initialized show error

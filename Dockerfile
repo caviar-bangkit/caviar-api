@@ -13,9 +13,6 @@ RUN npm install --only=production
 # Copy local code to the container image.
 COPY . ./
 
-# Generate the prisma client
-RUN npx prisma generate
-
 # Expose port 3000
 EXPOSE 3000
 
