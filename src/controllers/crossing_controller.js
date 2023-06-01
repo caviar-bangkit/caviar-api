@@ -95,8 +95,8 @@ const createCrossing = async (req, res) => {
     const db = await pool.getConnection();
     // check duplicate
     const crossingDuplicate = await db.query(`
-      SELECT * FROM Crossing WHERE name = ${name}`);
-    if (crossingDuplicate !== null) {
+      SELECT * FROM Crossing WHERE name = '${name}'`);
+    if (crossingDuplicate.length > 0) {
       return Response.error(
         res,
         `Crossing with name ${name} already exists`,
