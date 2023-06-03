@@ -1,33 +1,17 @@
-const connection = require("../config/database");
+const prisma = require("../prisma/connection");
 const Response = require("../helper/Response");
 const StatusCode = require("../helper/StatusCode");
-
-// Create a connection pool
-const createPool = async () => {
-  const config = {
-    connectionLimit: 10,
-    connectTimeout: 10000,
-    acquireTimeout: 10000,
-    waitForConnections: true,
-    queueLimit: 0,
-  };
-
-  const pool = await connection(config);
-  return pool;
-};
-
-const poolPromise = createPool();
-
 // Get all crossings
 const getAllsCrossing = async (req, res) => {
   try {
-    const pool = await poolPromise;
-    const db = await pool.getConnection();
-    const crossings = await db.query("SELECT * FROM Crossing");
-    db.release();
+    const crossings = await prisma.crossing.findMany();
     return Response.success(res, "Data success fetch", crossings);
   } catch (error) {
-    return Response.error(res, error.message, StatusCode.INTERNAL_SERVER_ERROR);
+    return Response.error(
+      res,
+      "Error on fetch",
+      StatusCode.INTERNAL_SERVER_ERROR
+    );
   }
 };
 
@@ -35,45 +19,49 @@ const getAllsCrossing = async (req, res) => {
 const getCrossing = async (req, res) => {
   try {
     const { id } = req.params;
-    const pool = await poolPromise;
-    const db = await pool.getConnection();
-    const crossing = await db.query(`SELECT * FROM Crossing WHERE id = ${id}`);
-    db.release();
-    if (crossing.length !== 0) {
-      return Response.success(res, "Data success fetch", crossing[0]);
+    const crossing = await prisma.crossing.findUnique({
+      where: {
+        id: Number(id),
+      },
+    });
+    if (crossing !== null) {
+      return Response.success(res, `Data success fetch by id ${id}`, crossing);
     }
-    return Response.error(res, "Data not found", StatusCode.NOT_FOUND);
+    return Response.error(
+      res,
+      `Crossing with id ${id} not found`,
+      StatusCode.NOT_FOUND
+    );
   } catch (error) {
-    return Response.error(res, error.message, StatusCode.INTERNAL_SERVER_ERROR);
+    return Response.error(
+      res,
+      "Error on fetch",
+      StatusCode.INTERNAL_SERVER_ERROR
+    );
   }
 };
 
 // Get nearest crossings by lat and lng params using earth radius formula
 const getNearestCrossings = async (req, res) => {
   try {
-    const { lat, lng, radius } = req.query;
-    const pool = await poolPromise;
-    const db = await pool.getConnection();
-
-    // Check params
+    const { latitude: lat, longitude: lng, radius } = req.query;
+    // check params
     if (lat === undefined || lng === undefined || radius === undefined) {
       return Response.error(
         res,
-        "Please provide lat, lng, and radius",
-        StatusCode.BAD_REQUEST
+        "Please provide latitude, longitude, and radius",
+        StatusCode.INTERNAL_SERVER_ERROR
       );
     }
 
-    // Search nearest crossing using earth radius formula
     const earthRadius = 6371; // earth radius in km
-    const crossings = await db.query(`
+    const crossings = await prisma.$queryRaw`
       SELECT *, (${earthRadius} * acos(cos(radians(${lat})) * cos(radians(latitude)) * cos(radians(longitude) - radians(${lng})) + sin(radians(${lat})) * sin(radians(latitude)))) AS distance
       FROM Crossing
       HAVING distance < ${radius}
       ORDER BY distance
       LIMIT 1
-    `);
-    db.release();
+    `;
     if (crossings.length !== 0) {
       return Response.success(
         res,
@@ -81,9 +69,14 @@ const getNearestCrossings = async (req, res) => {
         crossings[0]
       );
     }
+
     return Response.error(res, "No traffic light nearby", StatusCode.NOT_FOUND);
   } catch (error) {
-    return Response.error(res, error.message, StatusCode.INTERNAL_SERVER_ERROR);
+    return Response.error(
+      res,
+      "Error on fetch",
+      StatusCode.INTERNAL_SERVER_ERROR
+    );
   }
 };
 
@@ -91,12 +84,13 @@ const getNearestCrossings = async (req, res) => {
 const createCrossing = async (req, res) => {
   try {
     const { name, latitude, longitude, heading } = req.body;
-    const pool = await poolPromise;
-    const db = await pool.getConnection();
     // check duplicate
-    const crossingDuplicate = await db.query(`
-      SELECT * FROM Crossing WHERE name = '${name}'`);
-    if (crossingDuplicate.length > 0) {
+    const crossingDuplicate = await prisma.crossing.findUnique({
+      where: {
+        name: name,
+      },
+    });
+    if (crossingDuplicate !== null) {
       return Response.error(
         res,
         `Crossing with name ${name} already exists`,
@@ -116,16 +110,21 @@ const createCrossing = async (req, res) => {
         StatusCode.BAD_REQUEST
       );
     }
-    const crossing = await db.query("INSERT INTO Crossing SET ?", {
-      name,
-      latitude,
-      longitude,
-      heading,
+    const crossing = await prisma.crossing.create({
+      data: {
+        name,
+        latitude,
+        longitude,
+        heading,
+      },
     });
-    db.release();
     return Response.success(res, "Crossing created successfully", crossing);
   } catch (error) {
-    return Response.error(res, error.message, StatusCode.INTERNAL_SERVER_ERROR);
+    return Response.error(
+      res,
+      "Error on fetch",
+      StatusCode.INTERNAL_SERVER_ERROR
+    );
   }
 };
 
@@ -134,8 +133,6 @@ const updateCrossing = async (req, res) => {
   try {
     const { id } = req.params;
     const { name, latitude, longitude, heading } = req.body;
-    const pool = await poolPromise;
-    const db = await pool.getConnection();
     // check params
     if (
       name === undefined ||
@@ -149,13 +146,17 @@ const updateCrossing = async (req, res) => {
         StatusCode.BAD_REQUEST
       );
     }
-    const crossing = await db.query(`
-      UPDATE Crossing
-      SET name = ${name}, latitude = ${latitude}, longitude = ${longitude}, heading = ${heading}
-      WHERE id = ${id}
-      RETURNING *
-      `);
-    db.release();
+    const crossing = await prisma.crossing.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        name,
+        latitude,
+        longitude,
+        heading,
+      },
+    });
     if (crossing !== null) {
       return Response.success(
         res,
@@ -170,7 +171,11 @@ const updateCrossing = async (req, res) => {
       );
     }
   } catch (error) {
-    return Response.error(res, error.message, StatusCode.INTERNAL_SERVER_ERROR);
+    return Response.error(
+      res,
+      "Error on fetch",
+      StatusCode.INTERNAL_SERVER_ERROR
+    );
   }
 };
 
@@ -178,14 +183,11 @@ const updateCrossing = async (req, res) => {
 const deleteCrossing = async (req, res) => {
   try {
     const { id } = req.params;
-    const pool = await poolPromise;
-    const db = await pool.getConnection();
-    const crossing = await db.query(`
-      DELETE FROM Crossing
-      WHERE id = ${id}
-      RETURNING *
-      `);
-    db.release();
+    const crossing = await prisma.crossing.delete({
+      where: {
+        id: Number(id),
+      },
+    });
     if (crossing !== null) {
       return Response.success(
         res,
@@ -199,7 +201,11 @@ const deleteCrossing = async (req, res) => {
       StatusCode.NOT_FOUND
     );
   } catch (error) {
-    return Response.error(res, error.message, StatusCode.INTERNAL_SERVER_ERROR);
+    return Response.error(
+      res,
+      "Error on fetch",
+      StatusCode.INTERNAL_SERVER_ERROR
+    );
   }
 };
 

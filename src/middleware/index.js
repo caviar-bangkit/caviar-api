@@ -1,15 +1,4 @@
-const firebase = require("firebase-admin");
-
-const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT;
-
-firebase.initializeApp({
-  credential: firebase.credential.cert(JSON.parse(serviceAccount)),
-});
-
-// if firebase admin is not initialized show error
-if (!firebase.apps.length) {
-  console.error("Firebase admin is not initialized");
-}
+const admin = require("../config/firebase-config");
 
 class Middleware {
   async decodeToken(req, res, next) {
@@ -19,7 +8,7 @@ class Middleware {
     }
     const token = authorizationHeader.split(" ")[1];
     try {
-      const decodeValue = await firebase.auth().verifyIdToken(token);
+      const decodeValue = await admin.auth().verifyIdToken(token);
       if (decodeValue) {
         req.user = decodeValue;
         return next();

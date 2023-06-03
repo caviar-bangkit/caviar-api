@@ -1,4 +1,8 @@
-function Home() {
-<h1>Haloooo</h1>
+const Home = () => {
+    return(
+        <>
+        <h1>Haloooo</h1>
+        </>
+    )
 }
 export default Home;

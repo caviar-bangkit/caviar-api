@@ -2,19 +2,40 @@ import "../App.css";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
-import { useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
 import ListOfCrossing from "../components/ListOfCrossings";
 import profile from "../image/a.png";
-import email from "../image/email.jpg";
+import emails from "../image/email.jpg";
 import pass from "../image/pass.png";
 import { useNavigate } from 'react-router-dom';
+import {AuthContext} from "../context/AuthContext"
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auths } from "../config/firebase-config";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const [auth, setAuth] = useState(
     false || window.localStorage.getItem("auth") === "true"
   );
   const [token, setToken] = useState("");
   const navigate = useNavigate();
+  const nav = useNavigate();
+
+  const {dispatch} = useContext(AuthContext);
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+
+    signInWithEmailAndPassword(auths, email, password)
+      .then((userCredential) => {
+        // Signed in
+        const user = userCredential.user;
+        dispatch({type:"LOGIN", payload:user});
+        nav('/home');
+      })
+  };
 
   useEffect(() => {
     firebase.auth().onAuthStateChanged((userCred) => {
@@ -36,7 +57,7 @@ function Login() {
         if (userCred) {
           setAuth(true);
           window.localStorage.setItem("auth", "true");
-          navigate('../home');
+          navigate('/home');
         }
       });
   };
@@ -52,17 +73,19 @@ function Login() {
         </div>
         <div>
           <h1>Admin Login</h1>
-          <div>
-            <img src={email} alt="email" className="email"/>
-            <input type="text" placeholder="username" className="name"/>
+          <form onSubmit={handleLogin}>
+            <div>
+              <img src={emails} alt="email" className="email"/>
+              <input type="email" placeholder="email" className="name" onChange={(e) => setEmail(e.target.value)}/>
+            </div>
+            <div className="second-input">
+              <img src={pass} alt="pass" className="email"/>
+              <input type="password" placeholder="password" className="name" onChange={(e) => setPassword(e.target.value)}/>
+            </div>
+          <div className="login-button">
+          <button type="submit">Login</button>
           </div>
-          <div className="second-input">
-            <img src={pass} alt="pass" className="email"/>
-            <input type="password" placeholder="password" className="name"/>
-          </div>
-         <div className="login-button">
-         <button>Login</button>
-         </div><br></br>
+         </form><br></br>
          {auth ? (
               <ListOfCrossing token={token} />
             ) : (
