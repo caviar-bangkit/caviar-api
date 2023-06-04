@@ -73,6 +73,86 @@ export const mockDataTeam = [
     phone: "(444)555-6239",
     access: "admin",
   },
+  {
+    id: 10,
+    name: "Mabel Castillo",
+    email: "mabelcastillo@yahoo.com",
+    age: 29,
+    phone: "(555)666-9871",
+    access: "user"
+  },
+  {
+    id: 11,
+    name: "Alex Ross",
+    email: "alexross@hotmail.com",
+    age: 42,
+    phone: "(444)333-7526",
+    access: "user"
+  },
+  {
+    id: 12,
+    name: "Lila Cooper",
+    email: "lilacooper@gmail.com",
+    age: 23,
+    phone: "(555)222-5849",
+    access: "user"
+  },
+  {
+    id: 13,
+    name: "Travis Martin",
+    email: "travismartin@yahoo.com",
+    age: 37,
+    phone: "(444)111-3567",
+    access: "user"
+  },
+  {
+    id: 14,
+    name: "Ella Sanchez",
+    email: "ellasanchez@hotmail.com",
+    age: 54,
+    phone: "(555)777-8014",
+    access: "user"
+  },
+  {
+    id: 15,
+    name: "Owen James",
+    email: "owenjames@gmail.com",
+    age: 46,
+    phone: "(444)888-9245",
+    access: "user"
+  },
+  {
+    id: 16,
+    name: "Lucy Parker",
+    email: "lucyparker@yahoo.com",
+    age: 31,
+    phone: "(555)999-1672",
+    access: "user"
+  },
+  {
+    id: 17,
+    name: "Finn Anderson",
+    email: "finnanderson@hotmail.com",
+    age: 27,
+    phone: "(444)777-3019",
+    access: "user"
+  },
+  {
+    id: 18,
+    name: "Avery Wright",
+    email: "averywright@gmail.com",
+    age: 39,
+    phone: "(555)444-7463",
+    access: "user"
+  },
+  {
+    id: 19,
+    name: "Sofia Ramirez",
+    email: "sofiaramirez@yahoo.com",
+    age: 49,
+    phone: "(444)555-8921",
+    access: "user"
+  }
 ];
 
 export const mockDataContacts = [
@@ -197,6 +277,37 @@ export const mockDataContacts = [
     zipCode: "1234",
     registrarId: 92197,
   },
+  {id: 12,
+    name: "Bethany Foster",
+    email: "bethanyfoster@yahoo.com",
+    age: 27,
+    phone: "(555)444-2342",
+    address: "8675 Fourth Ave, Suite 100",
+    city: "New York",
+    zipCode: "10001",
+    registrarId: 29583,
+  },
+  {id: 13,
+    name: "David Kim",
+    email: "davidkim@gmail.com",
+    age: 43,
+    phone: "(444)777-9823",
+    address: "9387 Fifth St, Apt 2B",
+    city: "Los Angeles",
+    zipCode: "90210",
+    registrarId: 45896,
+  },
+  {id: 14,
+    name: "Rachel Lee",
+    email: "rachellee@hotmail.com",
+    age: 19,
+    phone: "(555)333-4895",
+    address: "2256 Sixth Ave, Unit 203",
+    city: "San Francisco",
+    zipCode: "94103",
+    registrarId: 17562,
+  },
+    
 ];
 
 export const mockDataInvoices = [
@@ -264,6 +375,38 @@ export const mockDataInvoices = [
     phone: "(222)444-5555",
     date: "05/02/2021",
   },
+  {
+    id: 9,
+    name: "Johnson James",
+    email: "johnsonjames@gmail.com",
+    cost: "16.75",
+    phone: "(333)555-6666",
+    date: "05/03/2021",
+    },
+    {
+    id: 10,
+    name: "Garcia Maria",
+    email: "garciamaria@gmail.com",
+    cost: "9.99",
+    phone: "(444)666-7777",
+    date: "05/04/2021",
+    },
+    {
+    id: 11,
+    name: "Lee David",
+    email: "leedavid@gmail.com",
+    cost: "31.45",
+    phone: "(555)777-8888",
+    date: "05/05/2021",
+    },
+    {
+    id: 12,
+    name: "Wong Olivia",
+    email: "wongolivia@gmail.com",
+    cost: "42.87",
+    phone: "(666)888-9999",
+    date: "05/06/2021",
+    },
 ];
 
 export const mockTransactions = [

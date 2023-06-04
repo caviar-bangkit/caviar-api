@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box, Typography, useTheme } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { tokens } from "../../theme";
@@ -81,9 +82,6 @@ const Team = () => {
           "& .MuiDataGrid-cell": {
             borderBottom: "none",
           },
-          "& .name-column--cell": {
-            color: colors.greenAccent[300],
-          },
           "& .MuiDataGrid-columnHeaders": {
             backgroundColor: colors.blueAccent[700],
             borderBottom: "none",
@@ -94,6 +92,9 @@ const Team = () => {
           "& .MuiDataGrid-footerContainer": {
             borderTop: "none",
             backgroundColor: colors.blueAccent[700],
+          },
+          "& .MuiDataGrid-row": {
+            borderBottom: "none !important",
           },
           "& .MuiCheckbox-root": {
             color: `${colors.greenAccent[200]} !important`,

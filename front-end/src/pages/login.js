@@ -1,9 +1,9 @@
-import "../App.css";
+import "../pages/login.css";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import { useContext, useState, useEffect } from "react";
-import ListOfCrossing from "../components/ListOfCrossings";
+import ListOfCrossing from "../components/crossing/ListOfCrossings";
 import profile from "../image/a.png";
 import emails from "../image/email.jpg";
 import pass from "../image/pass.png";

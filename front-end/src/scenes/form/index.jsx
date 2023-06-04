@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box, Button, TextField } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
@@ -13,7 +14,7 @@ const Form = () => {
 
   return (
     <Box m="20px">
-      <Header title="CREATE USER" subtitle="Create a New User Profile" />
+      <Header title="ADD USER" subtitle="Create a new profile for all uses" />
 
       <Formik
         onSubmit={handleFormSubmit}

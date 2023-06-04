@@ -1,3 +1,4 @@
+import React from 'react';
 import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import { mockTransactions } from "../../data/mockData";
@@ -12,6 +13,7 @@ import GeographyChart from "../../components/GeographyChart";
 import BarChart from "../../components/BarChart";
 import StatBox from "../../components/StatBox";
 import ProgressCircle from "../../components/ProgressCircle";
+import MainChart from "../../components/MainChart";
 
 const Dashboard = () => {
   const theme = useTheme();
@@ -21,7 +23,7 @@ const Dashboard = () => {
     <Box m="20px">
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
+        <Header title="ReactBOARD" subtitle="Welcome to this dashboard made with js and react" />
 
         <Box>
           <Button
@@ -161,8 +163,8 @@ const Dashboard = () => {
               </IconButton>
             </Box>
           </Box>
-          <Box height="250px" m="-20px 0 0 0">
-            <LineChart isDashboard={true} />
+          <Box height="230px" m="-20px 0 0 0">
+            <BarChart isDashboard={true} />
           </Box>
         </Box>
         <Box
@@ -251,12 +253,12 @@ const Dashboard = () => {
           <Typography
             variant="h5"
             fontWeight="600"
-            sx={{ padding: "30px 30px 0 30px" }}
+            sx={{ padding: "20px 20px 10px 20px" }}
           >
             Sales Quantity
           </Typography>
-          <Box height="250px" mt="-20px">
-            <BarChart isDashboard={true} />
+          <Box height="280px" mt="-20px">
+            <LineChart isDashboard={true} />
           </Box>
         </Box>
         <Box
@@ -272,8 +274,8 @@ const Dashboard = () => {
           >
             Geography Based Traffic
           </Typography>
-          <Box height="200px">
-            <GeographyChart isDashboard={true} />
+          <Box height="240px">
+            <MainChart isDashboard={true} />
           </Box>
         </Box>
       </Box>

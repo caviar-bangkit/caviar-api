@@ -1,3 +1,4 @@
+import React from "react";
 import { Box, useTheme } from "@mui/material";
 import Header from "../../components/Header";
 import Accordion from "@mui/material/Accordion";
@@ -12,12 +13,12 @@ const FAQ = () => {
   const colors = tokens(theme.palette.mode);
   return (
     <Box m="20px">
-      <Header title="FAQ" subtitle="Frequently Asked Questions Page" />
+      <Header title="Frequent Questions" subtitle="A Very Helpful  Page" />
 
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography color={colors.greenAccent[500]} variant="h5">
-            An Important Question
+             Question 1
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -30,7 +31,7 @@ const FAQ = () => {
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography color={colors.greenAccent[500]} variant="h5">
-            Another Important Question
+             Question 2
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -43,7 +44,7 @@ const FAQ = () => {
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography color={colors.greenAccent[500]} variant="h5">
-            Your Favorite Question
+             Question 3
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -56,7 +57,7 @@ const FAQ = () => {
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography color={colors.greenAccent[500]} variant="h5">
-            Some Random Question
+           Question 4
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -69,7 +70,7 @@ const FAQ = () => {
       <Accordion defaultExpanded>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
           <Typography color={colors.greenAccent[500]} variant="h5">
-            The Final Question
+            Question 6
           </Typography>
         </AccordionSummary>
         <AccordionDetails>

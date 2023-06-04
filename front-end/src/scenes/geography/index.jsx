@@ -1,3 +1,4 @@
+import React from "react"
 import { Box, useTheme } from "@mui/material";
 import GeographyChart from "../../components/GeographyChart";
 import Header from "../../components/Header";
@@ -12,8 +13,8 @@ const Geography = () => {
 
       <Box
         height="75vh"
-        border={`1px solid ${colors.grey[100]}`}
-        borderRadius="4px"
+        border={`px solid ${colors.greenAccent[100]}`}
+        borderRadius="8px"
       >
         <GeographyChart />
       </Box>
