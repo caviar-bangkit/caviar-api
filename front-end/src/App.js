@@ -7,6 +7,7 @@ import Login from './pages/login';
 import Home from './pages/home';
 import Team from "./scenes/team";
 import List from './pages/crossings';
+import Contacts from "./scenes/contacts";
 
 function App() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ function App() {
           <Route exact path="/" element={<Login/>}/>
           <Route exact path="/home" element={<Home/>}/>
           <Route exact path="/team" element={<List />} />
+          <Route exact path="/contacts" element={<Contacts />} />
         </Routes>
       </div>
   );

@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-function Home() {
+export default function Home({ token }) {
   const [crossings, setCrossings] = useState([]);
 
   useEffect(() => {
@@ -22,8 +22,10 @@ function Home() {
   };
 
   function deleteCrossings(id) {
-    axios.delete(`http://localhost:5000/crossings/${id}`).then(loadCrossings());
+    axios.delete(`http://localhost:5000/crossings/${id}`).then(fetchData());
   }
+
+  console.log(crossings)
 
   return (
     <>
@@ -74,6 +76,7 @@ function Home() {
                       </th>
                     </tr>
                   </thead>
+                  
                   <tbody className="border-black border-b-2">
                     {crossings.map((data, index) => (
                       <tr
@@ -96,12 +99,6 @@ function Home() {
                           {data.header}
                         </td>
                         <td className="text-sm flex justify-between  items-center text-gray-900 font-bold px-6 py-4 space-x-4 whitespace-nowrap">
-                          <Link
-                            to={`/crossings/${data.id}`}
-                            className="bg-teal-600 text-white px-6 py-2 rounded-lg"
-                          >
-                            VIew
-                          </Link>
                           <Link
                             to={`/edit-user/${data.id}`}
                             className="bg-blue-600 text-white px-6 py-2 rounded-lg"
@@ -128,5 +125,3 @@ function Home() {
     </>
   );
 }
-
-export default Home;
