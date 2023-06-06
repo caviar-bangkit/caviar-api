@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Header from './layout/Header';
-import Menu from './layout/Menu';
+import Header from '../pages/layout/Header';
+import Menu from '../pages/layout/Menu';
 
 export default function Crossings({ token }) {
   const [crossings, setCrossings] = useState([]);

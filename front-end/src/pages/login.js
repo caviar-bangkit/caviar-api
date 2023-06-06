@@ -2,7 +2,7 @@ import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import { useContext, useState, useEffect } from "react";
-import ListOfCrossing from "../components/crossing/ListOfCrossings";
+import ListOfCrossing from "../components/ListofCrossings";
 import { useNavigate } from 'react-router-dom';
 import {AuthContext} from "../context/AuthContext"
 import { signInWithEmailAndPassword } from "firebase/auth";
