@@ -1,16 +1,13 @@
-import "../pages/login.css";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
 import { useContext, useState, useEffect } from "react";
 import ListOfCrossing from "../components/crossing/ListOfCrossings";
-import profile from "../image/a.png";
-import emails from "../image/email.jpg";
-import pass from "../image/pass.png";
 import { useNavigate } from 'react-router-dom';
 import {AuthContext} from "../context/AuthContext"
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auths } from "../config/firebase-config";
+import React from 'react'
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -62,40 +59,64 @@ function Login() {
   };
 
   return (
-    <div className="main">
-    <div className="sub-main">
-      <div>
-        <div className="imgs">
-          <div className="container-image">
-            <img src={profile} alt="profile" className="profile"/>
-          </div>
+  <div class="hold-transition login-page">
+    <div class="login-box">
+      <div class="card card-outline card-primary">
+        <div class="card-header text-center">
+          <img src="dist/img/caviar.png" alt="AdminLTE Logo" class="rounded mx-auto d-block" width="50%" />
+          <h2 class="mt-2 login-box-msg">CAVIAR</h2>
         </div>
-        <div>
-          <h1>Admin Login</h1>
+        <div class="card-body">
+          <h3 class="login-box-msg"><b>Login</b></h3>
+
           <form onSubmit={handleLogin}>
-            <div>
-              <img src={emails} alt="email" className="email"/>
-              <input type="email" placeholder="email" className="name" onChange={(e) => setEmail(e.target.value)}/>
-            </div>
-            <div className="second-input">
-              <img src={pass} alt="pass" className="email"/>
-              <input type="password" placeholder="password" className="name" onChange={(e) => setPassword(e.target.value)}/>
-            </div>
-          <div className="login-button">
-          <button type="submit">Login</button>
+          <div class="row">
+              <div class="input-group mb-3 ">
+                <input type="email" class="form-control " name="email" placeholder="Email" className="name" onChange={(e) => setEmail(e.target.value)} />
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-envelope"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="input-group mb-3">
+                <input type="password" class="form-control" name="password" placeholder="Password" className="name" onChange={(e) => setPassword(e.target.value)} />
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <span class="fas fa-lock"></span>
+                  </div>
+                </div>
+              </div>
           </div>
-         </form><br></br>
-         {auth ? (
-              <ListOfCrossing token={token} />
-            ) : (
-              <button onClick={loginWithGoogle} >Login with Google</button>
-            )}
+            <div class="row">
+              <div class="col-8">
+                <div class="icheck-primary">
+                  <input type="checkbox" id="remember" />
+                  <label for="remember">
+                    Remember Me
+                  </label>
+                </div>
+              </div>
+              
+              <div class="col-4">
+                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+              </div>
+              
+            </div>
+          </form>
+              <div class="col-4">
+              {auth ? (
+                  <ListOfCrossing token={token} />
+                ) : (
+                <button onClick={loginWithGoogle} class="btn btn-danger btn-block">Google</button>
+                )}
+              </div>
         </div>
       </div>
     </div>
-   </div>
+  </div>
            
-  );
+  )
 }
 
 export default Login;
