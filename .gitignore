@@ -4,8 +4,4 @@ node_modules/
 # Environment variables
 .env
 
-# Service account file
-/service-account.json
-
-# Data files
-/data.json
+data.json

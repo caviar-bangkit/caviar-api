@@ -1,15 +1,17 @@
 const express = require("express");
 const cors = require("cors");
-const CrossingRoute = require("./routes/crossing_route");
 const middleware = require('./middleware');
+const data = require("./data");
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use(middleware.decodeToken);
+// app.use(middleware.decodeToken);
 
-app.use("/api", CrossingRoute);
+app.use("/api", (req, res) => {
+  res.json(data);
+});
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the CAVIAR API" });

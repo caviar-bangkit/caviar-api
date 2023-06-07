@@ -1,23 +1,19 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
-export default function ListOfCrossing({ token }) {
+import React, { useEffect, useState } from "react";
+export default function ListOfCrossing() {
   const [crossings, setCrossings] = useState([]);
 
   useEffect(() => {
-    if (token) {
-      fetchData(token);
-    }
-  }, [token]);
+    fetchData();
+  }, []);
+  // change with token later
 
-  const fetchData = async (token) => {
-    const res = await axios.get("http://localhost:5000/api/crossings", {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
-    console.log(res.data.data);
-    setCrossings(res.data.data);
+  const fetchData = async () => {
+    const res = await axios.get("http://localhost:5000/api") // change to real api url later
+    setCrossings(res.data);
+    console.log(res.data);
   };
+  // add authorization header later
 
   return (
     <div className="listOfCrossing">

@@ -4,30 +4,29 @@ import { Link } from "react-router-dom";
 import Header from '../pages/layout/Header';
 import Menu from '../pages/layout/Menu';
 
-export default function Crossings({ token }) {
+export default function Crossings() {
   const [crossings, setCrossings] = useState([]);
 
   useEffect(() => {
-    if (token) {
-      fetchData(token);
-    }
-  }, [token]);
+    fetchData();
+  }, []);
+  // change with token later
 
-  const fetchData = async (token) => {
-    const res = await axios.get("http://localhost:5000/api/crossings", {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
-    console.log(res.data.data);
-    setCrossings(res.data.data);
+  const fetchData = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api"); // change to real api url later
+      // add authorization header later
+      console.log(res.data.data);
+      setCrossings(res.data.data); // adjust with response from real api later
+    } catch (error) {
+      console.log(error);
+      // Handle error
+    }
   };
 
   function deleteCrossings(id) {
     axios.delete(`http://localhost:5000/crossings/${id}`).then(fetchData());
   }
-
-  console.log(crossings)
 
   return (
     <div class="wrapper">
@@ -70,7 +69,7 @@ export default function Crossings({ token }) {
 			      <th scope="col">Name</th>
 				    <th scope="col">Latitude</th>
             <th scope="col">Longtitude</th>
-            <th scope="col">Header</th>
+            <th scope="col">Heading</th>
             <th scope="col">Admin</th>
 			    </tr>
 			  </thead>
@@ -80,8 +79,8 @@ export default function Crossings({ token }) {
             <td>{index + 1}</td>
             <td>{data.name}</td>
             <td>{data.latitude}</td>
-            <td>{data.longtitude}</td>
-            <td>{data.header}</td>
+            <td>{data.longitude}</td>
+            <td>{data.heading}</td>
             <td>
               <Link
                 to={`/edit-user/${data.id}`}
