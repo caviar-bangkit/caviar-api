@@ -13,7 +13,7 @@ function App() {
     <div>
         {/* <button onClick={() => navigate(-1)}>go back</button> */}
         <Routes>
-          {/* <Route exact path="/" element={<Login/>}/> */}
+          <Route exact path="/" element={<Login/>}/>
           <Route exact path="/home" element={<Home/>}/>
           <Route exact path="/crossings" element={<Crossings/>}/>
           <Route exact path="/addcrossings" element={<AddCrossings/>}/>
