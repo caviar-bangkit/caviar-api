@@ -20,7 +20,7 @@ export default function AddCrossings() {
 
   function submitForm(e) {
     e.preventDefault();
-    axios.post("http://localhost:5000/api/crossing", data).then(navigate("/crossings"));
+    axios.post("http://localhost:5000/api", data).then(navigate("/crossings"));
   }
   return (
     <div class="wrapper">

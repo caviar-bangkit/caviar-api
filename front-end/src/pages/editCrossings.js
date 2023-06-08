@@ -1,20 +1,34 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Header from '../pages/layout/Header';
+import Menu from '../pages/layout/Menu';
 
-export default function EditCrossings({ token }) {
+export default function EditCrossings() {
   const [name, setName] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longtitude, setLongtitude] = useState("");
-  const [header, setHeader] = useState("");
+  const [heading, setHeading] = useState("");
 
   const { id } = useParams();
 
   useEffect(() => {
-    if (token) {
-      fetchData(token);
-    }
-  }, [token]);
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/${id}`);
+        // set the state of the data based on the id
+        setName(res.data.name);
+        setLatitude(res.data.latitude);
+        setLongtitude(res.data.longtitude);
+        setHeading(res.data.heading);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        // Handle the error (e.g., display an error message, redirect, etc.)
+      }
+    };
+  
+    fetchData();
+  }, [id]);
 
   const navigate = useNavigate();
 
@@ -22,25 +36,13 @@ export default function EditCrossings({ token }) {
     name: name,
     latitude: latitude,
     longtitude: longtitude,
-    header: header
+    heading: heading
   };
 
-  const fetchData = async (token) => {
-    const res = await axios.get("http://localhost:5000/api/crossings${id}", {
-      headers: {
-        Authorization: "Bearer " + token,
-      },
-    });
-    console.log(res.data.data);
-    setName(res.data.name);
-    setLatitude(res.data.latitude);
-    setLongtitude(res.data.longtitude);
-    setHeader(res.data.header);
-  };
 
   function Update(e) {
     e.preventDefault();
-    axios.put(`http://localhost:5000/api/crossing/${id}`, data).then(navigate("/home"));
+    axios.put(`http://localhost:5000/api/${id}`, data).then(navigate("/home"));
   }
   return (
     <div class="wrapper">
@@ -79,8 +81,8 @@ export default function EditCrossings({ token }) {
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Header</label>
 							  <input type="number" id="header" name="header" class="form-control" 
-                  onChange={(e) => setHeader(e.target.value)}
-                  value={header}/>
+                  onChange={(e) => setHeading(e.target.value)}
+                  value={heading}/>
 						  </div>
 						  <button type="submit" class="btn btn-primary pr-3" onClick={Update}>Simpan</button>
 						</form>
