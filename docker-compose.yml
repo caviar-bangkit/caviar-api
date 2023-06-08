@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=090202
+      - MYSQL_DATABASE=caviar-db
+    ports:
+      - '3307:3306'
+    volumes:
+      - db:/var/lib/mysql
+volumes:
+  db:
