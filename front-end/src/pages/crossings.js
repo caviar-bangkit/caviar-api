@@ -6,8 +6,6 @@ import ListCrossing from '../pages/ListCrossing';
 import AddForm from '../pages/addCrossings';
 import Header from '../pages/layout/Header';
 import Menu from '../pages/layout/Menu';
-import ListCrossing from '../pages/ListCrossing';
-import AddForm from '../pages/addCrossings';
 
 export default function Crossings() {
   const [crossings, setCrossings] = useState([]);
@@ -21,6 +19,7 @@ export default function Crossings() {
   const fetchData = async () => {
     try {
       const res = await axios.get("http://localhost:5000/api"); // change to real api url later
+      console.log(res.data.data);
       setCrossings(res.data.data); // adjust with response from real api later
     } catch (error) {
       console.log(error);
@@ -85,8 +84,6 @@ export default function Crossings() {
             </div>
           </div>
         </div>
-      </div>
-    </div>
 
         <div className="container">
           <div className="table-title">
@@ -123,7 +120,7 @@ export default function Crossings() {
           </div>
 
           <Modal show={show} onHide={handleClose}>
-            <Modal.Header closeButton={handleClose}>
+            <Modal.Header closeButton>
               <Modal.Title>Add Crossings</Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -136,53 +133,7 @@ export default function Crossings() {
             </Modal.Footer>
           </Modal>
         </div>
+      </div>
     </div>
-
-    <br></br><Alert show={showAlert} variant="success">
-        Crossing Data Updated Succefully!
-    </Alert>
-
-    <table className="table table-striped table-hover">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Name</th>
-                <th>Latitude</th>
-                <th>Longtitude</th>
-                <th>Header</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-
-                {
-                        <ListCrossing/>
-                }
-                
-
-        </tbody>
-    </table>
-
-    <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-            <Modal.Title>
-                Add Crossings
-            </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-            <AddForm />
-        </Modal.Body>
-        <Modal.Footer>
-                <Button variant="secondary" onClick={handleClose}>
-                    Close Button
-                </Button>
-        </Modal.Footer>
-    </Modal>
-    </div>
-</div>
-</div>
-
-    
   );
 }
-
