@@ -1,92 +1,66 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React from "react";
+import { Button, Form } from "react-bootstrap";
 import { v4 as uuidv4 } from 'uuid';
-import { Form, Button } from "react-bootstrap";
 
-export default function AddCrossings() {
-  const [crossings, setCrossings] = useState([]);
-
-  const [name, setName] = useState("");
-  const [latitude, setLatitude] = useState("");
-  const [longitude, setLongitude] = useState("");
-  const [heading, setHeading] = useState("");
-  const [id, setId] = uuidv4();
-  
-
-  const data = {
-    id: id,
-    name: name,
-    latitude: latitude,
-    longitude: longitude,
-    heading: heading
+export default function AddCrossings({ handleClose, handleDataUpdate }) {
+  const submitForm = (e) => {
+    e.preventDefault();
+    const id = uuidv4();
+    const data = {
+      id: id,
+      name: e.target.name.value,
+      latitude: e.target.latitude.value,
+      longitude: e.target.longitude.value,
+      heading: e.target.heading.value
+    };
+    axios.post("http://localhost:5000/api", data)
+      .then(() => {
+        // Call the handleDataUpdate function passed as a prop
+        handleDataUpdate();
+        // Reset form fields
+        e.target.reset();
+      })
+      .catch((error) => {
+        console.log(error);
+        // Handle error
+      });
   };
 
-  const fetchData = async () => {
-    try {
-      const res = await axios.get("http://localhost:5000/api"); // change to real api url later
-      // add authorization header later
-      console.log(res.data.data);
-      setCrossings(res.data.data); // adjust with response from real api later
-    } catch (error) {
-      console.log(error);
-      // Handle error
-    }
-  };
-
-  function submitForm() {
-    axios.post("http://localhost:5000/api", data).then(fetchData());
-  }
   return (
     <Form onSubmit={submitForm}>
-        <Form.Group>
-          <Form.Control
-              type="text"
-              name="id"
-              value={id}
-              onChange={(e) => setId(e.target.value)}
-              readOnly
-          />
+      <Form.Group>
+        <Form.Control
+          type="text"
+          name="name"
+          placeholder="Name"
+          required
+        />
       </Form.Group><br></br>
       <Form.Group>
-          <Form.Control
-              type="text"
-              placeholder="Name"
-              name="name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-          />
+        <Form.Control
+          type="text"
+          name="latitude"
+          placeholder="Latitude"
+        />
       </Form.Group><br></br>
       <Form.Group>
-          <Form.Control
-              type="text"
-              placeholder="Latitude"
-              name="latitude"
-              value={latitude}
-              onChange={(e) => setLatitude(e.target.value)}
-          />
+        <Form.Control
+          type="text"
+          name="longitude"
+          placeholder="Longitude"
+        />
       </Form.Group><br></br>
       <Form.Group>
-          <Form.Control
-              type="text"
-              placeholder="Longitude"
-              name="longitude"
-              value={longitude}
-              onChange={(e) => setLongitude(e.target.value)}
-          />
-      </Form.Group><br></br>
-      <Form.Group>
-          <Form.Control
-              type="text"
-              placeholder="Header"
-              name="heading"
-              value={heading}
-              onChange={(e) => setHeading(e.target.value)}
-          />
+        <Form.Control
+          type="text"
+          name="heading"
+          placeholder="Heading"
+        />
       </Form.Group><br></br>
       <Button variant="success" type="submit" block>
-          Create
+        Create
       </Button>
-  </Form>
-  )
-};
+    </Form>
+  );
+}

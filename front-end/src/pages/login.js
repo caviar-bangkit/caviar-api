@@ -1,26 +1,20 @@
+import { signInWithEmailAndPassword } from "firebase/auth";
 import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
-import { useContext, useState, useEffect } from "react";
-import ListOfCrossing from "../components/ListofCrossings";
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {AuthContext} from "../context/AuthContext"
-import { signInWithEmailAndPassword } from "firebase/auth";
+import ListOfCrossing from "../components/ListofCrossings";
 import { auths } from "../config/firebase-config";
-import React from 'react'
+import { AuthContext } from "../context/AuthContext";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const [auth, setAuth] = useState(
-    false || window.localStorage.getItem("auth") === "true"
-  );
+  const [auth, setAuth] = useState(false);
   const [token, setToken] = useState("");
   const navigate = useNavigate();
-  const nav = useNavigate();
-
-  const {dispatch} = useContext(AuthContext);
+  const { dispatch } = useContext(AuthContext);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -29,20 +23,28 @@ function Login() {
       .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
-        nav('/home');
+        navigate("/home");
       })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   useEffect(() => {
-    firebase.auth().onAuthStateChanged((userCred) => {
+    const unsubscribe = firebase.auth().onAuthStateChanged((userCred) => {
       if (userCred) {
         setAuth(true);
         window.localStorage.setItem("auth", "true");
         userCred.getIdToken().then((token) => {
           setToken(token);
         });
+      } else {
+        setAuth(false);
+        window.localStorage.removeItem("auth");
       }
     });
+
+    return () => unsubscribe();
   }, []);
 
   const loginWithGoogle = () => {
@@ -53,70 +55,88 @@ function Login() {
         if (userCred) {
           setAuth(true);
           window.localStorage.setItem("auth", "true");
-          navigate('/home');
+          navigate("/home");
         }
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
 
   return (
-  <div class="hold-transition login-page">
-    <div class="login-box">
-      <div class="card card-outline card-primary">
-        <div class="card-header text-center">
-          <img src="dist/img/caviar.png" alt="AdminLTE Logo" class="rounded mx-auto d-block" width="50%" />
-          <h2 class="mt-2 login-box-msg">CAVIAR</h2>
-        </div>
-        <div class="card-body">
-          <h3 class="login-box-msg"><b>Login</b></h3>
-
-          <form onSubmit={handleLogin}>
-          <div class="row">
-              <div class="input-group mb-3 ">
-                <input type="email" class="form-control " name="email" placeholder="Email" className="name" onChange={(e) => setEmail(e.target.value)} />
-                <div class="input-group-append">
-                  <div class="input-group-text">
-                    <span class="fas fa-envelope"></span>
-                  </div>
-                </div>
-              </div>
-              <div class="input-group mb-3">
-                <input type="password" class="form-control" name="password" placeholder="Password" className="name" onChange={(e) => setPassword(e.target.value)} />
-                <div class="input-group-append">
-                  <div class="input-group-text">
-                    <span class="fas fa-lock"></span>
-                  </div>
-                </div>
-              </div>
+    <div className="hold-transition login-page">
+      <div className="login-box">
+        <div className="card card-outline card-primary">
+          <div className="card-header text-center">
+            <img
+              src="dist/img/caviar.png"
+              alt="AdminLTE Logo"
+              className="rounded mx-auto d-block"
+              width="50%"
+            />
+            <h2 className="mt-2 login-box-msg">CAVIAR</h2>
           </div>
-            <div class="row">
-              <div class="col-8">
-                <div class="icheck-primary">
-                  <input type="checkbox" id="remember" />
-                  <label for="remember">
-                    Remember Me
-                  </label>
+          <div className="card-body">
+            <h3 className="login-box-msg">
+              <b>Admin Login</b>
+            </h3>
+
+            <form onSubmit={handleLogin}>
+              <div className="input-group mb-3">
+                <input
+                  type="email"
+                  className="form-control"
+                  name="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+                <div className="input-group-append">
+                  <div className="input-group-text">
+                    <span className="fas fa-envelope"></span>
+                  </div>
                 </div>
               </div>
-              
-              <div class="col-4">
-                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+              <div className="input-group mb-3">
+                <input
+                  type="password"
+                  className="form-control"
+                  name="password"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <div className="input-group-append">
+                  <div className="input-group-text">
+                    <span className="fas fa-lock"></span>
+                  </div>
+                </div>
               </div>
-              
-            </div>
-          </form>
-              <div class="col-4">
+
+              <div className="d-flex justify-content-center">
+                <button type="submit" className="btn btn-primary">
+                  Sign In with Email
+                </button>
+              </div>
+            </form>
+
+            <div className="d-flex justify-content-center mt-3">
               {auth ? (
-                  <ListOfCrossing token={token} />
-                ) : (
-                <button onClick={loginWithGoogle} class="btn btn-danger btn-block">Google</button>
-                )}
-              </div>
+                <ListOfCrossing token={token} />
+              ) : (
+                <button
+                  onClick={loginWithGoogle}
+                  className="btn btn-danger"
+                >
+                  Log In with Google
+                </button>
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-           
-  )
+  );
 }
 
 export default Login;
