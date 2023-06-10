@@ -2,10 +2,12 @@ import {useContext, useState, useEffect} from 'react';
 import { Modal, Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import EditForm from '../pages/editCrossings';
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 export default function ListCrossings() {
     const [crossings, setCrossings] = useState([]);
-
+    const { id } = useParams();
+    
   useEffect(() => {
     fetchData();
   }, []);

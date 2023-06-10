@@ -1,28 +1,52 @@
 import axios from "axios";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
 import { Form, Button } from "react-bootstrap";
 
 export default function AddCrossings() {
+  const [crossings, setCrossings] = useState([]);
+
   const [name, setName] = useState("");
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [heading, setHeading] = useState("");
+  const [id, setId] = uuidv4();
+  
 
-  const navigate = useNavigate();
   const data = {
+    id: id,
     name: name,
     latitude: latitude,
     longitude: longitude,
     heading: heading
   };
 
-  function submitForm(e) {
-    e.preventDefault();
-    axios.post("http://localhost:5000/api", data).then(navigate("/crossings"));
+  const fetchData = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api"); // change to real api url later
+      // add authorization header later
+      console.log(res.data.data);
+      setCrossings(res.data.data); // adjust with response from real api later
+    } catch (error) {
+      console.log(error);
+      // Handle error
+    }
+  };
+
+  function submitForm() {
+    axios.post("http://localhost:5000/api", data).then(fetchData());
   }
   return (
     <Form onSubmit={submitForm}>
+        <Form.Group>
+          <Form.Control
+              type="text"
+              name="id"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+              readOnly
+          />
+      </Form.Group><br></br>
       <Form.Group>
           <Form.Control
               type="text"

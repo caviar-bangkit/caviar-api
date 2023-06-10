@@ -10,16 +10,14 @@ export default function EditCrossings() {
   const [latitude, setLatitude] = useState("");
   const [longitude, setLongitude] = useState("");
   const [heading, setHeading] = useState("");
-
   const { id } = useParams();
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const navigate = useNavigate();
-
   const data = {
+    id: id,
     name: name,
     latitude: latitude,
     longitude: longitude,
@@ -28,7 +26,7 @@ export default function EditCrossings() {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api"); // change to real api url later
+      const res = await axios.get(`http://localhost:5000/api`); // change to real api url later
       // add authorization header later
       console.log(res.data.data);
       setCrossings(res.data.data); // adjust with response from real api later
@@ -38,18 +36,19 @@ export default function EditCrossings() {
     }
   };
 
-  function Update(e) {
-    e.preventDefault();
-    axios.put(`http://localhost:5000/api/${id}`, data).then(navigate("/home"));
+  function Update(id) {
+    axios.put(`http://localhost:5000/api/${id}`, data).then(fetchData());
   }
   return (
-    <Form onSubmit={Update}>
+    <>
+    {crossings.map((data) => (
+    <Form onSubmit={Update(data.id)}>
     <Form.Group>
         <Form.Control
             type="text"
             placeholder="Name"
             name="name"
-            value={crossings.name}
+            value={data.name}
             onChange={(e) => setName(e.target.value)}
             required
         />
@@ -59,7 +58,7 @@ export default function EditCrossings() {
             type="text"
             placeholder="Latitude"
             name="latitude"
-            value={crossings.latitude}
+            value={data.latitude}
             onChange={(e) => setLatitude(e.target.value)}
         />
     </Form.Group><br></br>
@@ -68,7 +67,7 @@ export default function EditCrossings() {
             type="text"
             placeholder="Longitude"
             name="longitude"
-            value={crossings.longitude}
+            value={data.longitude}
             onChange={(e) => setLongitude(e.target.value)}
         />
     </Form.Group><br></br>
@@ -77,7 +76,7 @@ export default function EditCrossings() {
             type="text"
             placeholder="Heading"
             name="heading"
-            value={crossings.heading}
+            value={data.heading}
             onChange={(e) => setHeading(e.target.value)}
         />
     </Form.Group><br></br>
@@ -85,5 +84,7 @@ export default function EditCrossings() {
         Update
     </Button>
 </Form>
+    ))}
+    </>
   );
 }
