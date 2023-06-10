@@ -30,7 +30,7 @@ app.post("/api", (req, res) => {
 app.put("/api/:id", (req, res) => {
   const { id } = req.params;
   const { name, latitude, longitude, heading } = req.body;
-  const crossing = data.find((crossing) => crossing.id === id);
+  const crossing = data.find((crossing) => crossing.id == id);
   crossing.name = name;
   crossing.latitude = latitude;
   crossing.longitude = longitude;

@@ -1,77 +1,66 @@
 import axios from "axios";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Header from '../pages/layout/Header';
-import Menu from '../pages/layout/Menu';
+import React from "react";
+import { Button, Form } from "react-bootstrap";
+import { v4 as uuidv4 } from 'uuid';
 
-export default function AddCrossings() {
-  const [name, setName] = useState("");
-  const [latitude, setLatitude] = useState("");
-  const [longtitude, setLongtitude] = useState("");
-  const [header, setHeader] = useState("");
-
-  const navigate = useNavigate();
-  const data = {
-    name: name,
-    latitude: latitude,
-    longtitude: longtitude,
-    header: header
+export default function AddCrossings({ handleClose, handleDataUpdate }) {
+  const submitForm = (e) => {
+    e.preventDefault();
+    const id = uuidv4();
+    const data = {
+      id: id,
+      name: e.target.name.value,
+      latitude: e.target.latitude.value,
+      longitude: e.target.longitude.value,
+      heading: e.target.heading.value
+    };
+    axios.post("http://localhost:5000/api", data)
+      .then(() => {
+        // Call the handleDataUpdate function passed as a prop
+        handleDataUpdate();
+        // Reset form fields
+        e.target.reset();
+      })
+      .catch((error) => {
+        console.log(error);
+        // Handle error
+      });
   };
 
-  function submitForm(e) {
-    e.preventDefault();
-    axios.post("http://localhost:5000/api", data).then(navigate("/crossings"));
-  }
   return (
-    <div class="wrapper">
-    <Header/>
-    <Menu/>
-    <h1 class="text-center mb-5 mt-5">Create Crossings Data</h1>
-
-    <div class="container mb-5">
-    	<div class="row justify-content-center">
-    		<div class="col-8">
-    			<div class="card">
-	    			<div class="card-body">
-	    				<form>
-						  <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Nama</label>
-							  <input type="text" id="name" name="name" class="form-control" 
-                  placeholder="Enter your name"
-                  onChange={(e) => setName(e.target.value)}
-                  value={name}
-                />
-						  </div>
-						  <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Latitude</label>
-							  <input type="number" id="latitude" name="latitude" class="form-control"
-                  placeholder="Enter your latitude" 
-                  onChange={(e) => setLatitude(e.target.value)}
-                  value={latitude}
-                />
-						  </div>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Longtitude</label>
-							  <input type="number" id="longtitude" name="longtitude" class="form-control"
-                  placeholder="Enter your longtitude"
-                  onChange={(e) => setLongtitude(e.target.value)}
-                  value={longtitude}
-                />
-						  </div>
-              <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Header</label>
-							  <input type="number" id="header" name="header" class="form-control" 
-                  placeholder="Enter your header"
-                  onChange={(e) => setHeader(e.target.value)}
-                  value={header}/>
-						  </div>
-						  <button type="submit" class="btn btn-primary pr-3" onClick={submitForm}>Simpan</button>
-						</form>
-    				</div>
-    			</div>
-    		</div>
-    	</div>
-    </div>
-    </div>
-  )
-};
+    <Form onSubmit={submitForm}>
+      <Form.Group>
+        <Form.Control
+          type="text"
+          name="name"
+          placeholder="Name"
+          required
+        />
+      </Form.Group><br></br>
+      <Form.Group>
+        <Form.Control
+          type="text"
+          name="latitude"
+          placeholder="Latitude"
+        />
+      </Form.Group><br></br>
+      <Form.Group>
+        <Form.Control
+          type="text"
+          name="longitude"
+          placeholder="Longitude"
+        />
+      </Form.Group><br></br>
+      <Form.Group>
+        <Form.Control
+          type="text"
+          name="heading"
+          placeholder="Heading"
+        />
+      </Form.Group><br></br>
+      <Button variant="success" type="submit" block>
+        Create
+      </Button>
+    </Form>
+  );
+}
