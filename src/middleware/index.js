@@ -15,7 +15,7 @@ class Middleware {
   async decodeToken(req, res, next) {
     const authorizationHeader = req.headers.authorization;
     if (!authorizationHeader) {
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ message: "Welcome to CAVIAR API, but sorry you have no access to this API." });
     }
     const token = authorizationHeader.split(" ")[1];
     try {
@@ -24,7 +24,7 @@ class Middleware {
         req.user = decodeValue;
         return next();
       }
-      return res.status(401).json({ message: "Unauthorized" });
+      return res.status(401).json({ message: "Welcome to CAVIAR API, but sorry you have no access to this API." });
     } catch (e) {
       console.error(e);
       return res.status(500).json({ message: "Internal Server Error" });
