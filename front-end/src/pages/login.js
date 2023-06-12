@@ -1,18 +1,14 @@
 import { signInWithEmailAndPassword } from "firebase/auth";
-import firebase from "firebase/compat/app";
 import "firebase/compat/auth";
 import "firebase/compat/firestore";
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ListOfCrossing from "../components/ListofCrossings";
 import { auths } from "../config/firebase-config";
 import { AuthContext } from "../context/AuthContext";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [auth, setAuth] = useState(false);
-  const [token, setToken] = useState("");
   const navigate = useNavigate();
   const { dispatch } = useContext(AuthContext);
 
@@ -30,39 +26,6 @@ function Login() {
       });
   };
 
-  useEffect(() => {
-    const unsubscribe = firebase.auth().onAuthStateChanged((userCred) => {
-      if (userCred) {
-        setAuth(true);
-        window.localStorage.setItem("auth", "true");
-        userCred.getIdToken().then((token) => {
-          setToken(token);
-        });
-      } else {
-        setAuth(false);
-        window.localStorage.removeItem("auth");
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
-
-  const loginWithGoogle = () => {
-    firebase
-      .auth()
-      .signInWithPopup(new firebase.auth.GoogleAuthProvider())
-      .then((userCred) => {
-        if (userCred) {
-          setAuth(true);
-          window.localStorage.setItem("auth", "true");
-          navigate("/home");
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   return (
     <div className="hold-transition login-page">
       <div className="login-box">
@@ -72,7 +35,7 @@ function Login() {
               src="dist/img/caviar.png"
               alt="AdminLTE Logo"
               className="rounded mx-auto d-block"
-              width="50%"
+              width="150"
             />
             <h2 className="mt-2 login-box-msg">CAVIAR</h2>
           </div>
@@ -114,24 +77,11 @@ function Login() {
               </div>
 
               <div className="d-flex justify-content-center">
-                <button type="submit" className="btn btn-primary">
-                  Sign In with Email
+                <button type="submit" className="btn btn-primary btn-block">
+                  Sign In
                 </button>
               </div>
             </form>
-
-            <div className="d-flex justify-content-center mt-3">
-              {auth ? (
-                <ListOfCrossing token={token} />
-              ) : (
-                <button
-                  onClick={loginWithGoogle}
-                  className="btn btn-danger"
-                >
-                  Log In with Google
-                </button>
-              )}
-            </div>
           </div>
         </div>
       </div>
