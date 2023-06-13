@@ -2,10 +2,14 @@ import axios from "axios";
 import React from "react";
 import { Button, Form } from "react-bootstrap";
 import { v4 as uuidv4 } from 'uuid';
+import firebase from 'firebase/compat/app';
 
-export default function AddCrossings({ handleClose, handleDataUpdate }) {
+export default function AddCrossings({ handleClose, handleDataUpdate }) {  
   const submitForm = (e) => {
     e.preventDefault();
+
+    firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
+    .then(function(token) {
     const id = uuidv4();
     const data = {
       id: id,
@@ -14,18 +18,27 @@ export default function AddCrossings({ handleClose, handleDataUpdate }) {
       longitude: e.target.longitude.value,
       heading: e.target.heading.value
     };
-    axios.post("https://caviar-api-qyyuck654a-et.a.run.app/api/crossing", data)
-      .then(() => {
-        // Call the handleDataUpdate function passed as a prop
-        handleDataUpdate();
-        // Reset form fields
-        e.target.reset();
-      })
-      .catch((error) => {
-        console.log(error);
-        // Handle error
-      });
-  };
+    axios.post("https://caviar-api-qyyuck654a-et.a.run.app/api/crossing", data, {
+      headers: {
+        Authorization: "Bearer " + token,
+      }
+    })
+    .then(() => {
+      // Call the handleDataUpdate function passed as a prop
+      handleDataUpdate();
+      // Reset form fields
+      e.target.reset();
+    })
+    .catch((error) => {
+      console.log(error);
+      // Handle error
+    });
+})
+.catch(function(error) {
+  console.log(error);
+  // Handle error
+})}
+
 
   return (
     <Form onSubmit={submitForm}>
