@@ -79,7 +79,7 @@ export default function Crossings() {
   }, []);
 
   useEffect(() => {
-    const timer = setInterval(fetchData, 1000);
+    const timer = setInterval(1000);
 
     return () => {
       clearInterval(timer);
