@@ -7,15 +7,23 @@ import EditForm from '../pages/editCrossings';
 export default function ListCrossings() {
     const [crossings, setCrossings] = useState([]);
     const { id } = useParams();
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
-        fetchData();
-    }, []);
+        if (token) {
+            fetchData(token);
+        }
+    }, [token]);
 
-    const fetchData = async () => {
+    const fetchData = async (token) => {
         try {
-            const res = await axios.get("http://localhost:5000/api");
-            setCrossings(res.data.data);
+            const res = await axios.get("https://caviar-api-qyyuck654a-et.a.run.app/api/crossings", {
+                headers: {
+                    Authorization: "Bearer " + token,
+                },
+            });
+            console.log(res.data.data);
+            setCrossings(res.data.data); // Update with the response data
         } catch (error) {
             console.log(error);
             // Handle error
@@ -39,7 +47,11 @@ export default function ListCrossings() {
     };
 
     function deleteCrossings(id) {
-        axios.delete(`http://localhost:5000/api/${id}`).then(() => fetchData());
+        axios.delete(`https://caviar-api-qyyuck654a-et.a.run.app/api/crossing/${id}`, {
+            headers: {
+                Authorization: "Bearer " + token,
+            },
+        }).then(() => fetchData(token));
     }
 
     return (

@@ -11,30 +11,49 @@ export default function Crossings() {
   const [crossings, setCrossings] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const [show, setShow] = useState(false);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    if (token) {
+      fetchData(token);
+    }
+  }, [token]);
 
-  const fetchData = async () => {
+  const fetchData = async (token) => {
     try {
-      const res = await axios.get("http://localhost:5000/api"); // change to real api url later
-      console.log(res.data.data);
-      setCrossings(res.data.data); // adjust with response from real api later
+      const res = await axios.get("https://caviar-api-qyyuck654a-et.a.run.app/api/crossings", {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      setCrossings(res.data.data);
+      setError(null);
     } catch (error) {
       console.log(error);
-      // Handle error
+      setError("An error occurred while fetching data.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const updateCrossings = async () => {
-    const updatedCrossings = await fetchData();
-    setCrossings(updatedCrossings);
+    await fetchData(token);
   };
 
-  function deleteCrossings(id) {
-    axios.delete(`http://localhost:5000/crossings/${id}`).then(() => fetchData());
-  }
+  const deleteCrossings = (id) => {
+    axios.delete(`https://caviar-api-qyyuck654a-et.a.run.app/api/crossings/${id}`, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+      .then(() => fetchData(token))
+      .catch((error) => {
+        console.log(error);
+        setError("An error occurred while deleting the crossing.");
+      });
+  };
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
@@ -61,7 +80,10 @@ export default function Crossings() {
 
   useEffect(() => {
     const timer = setInterval(fetchData, 1000);
-    return () => clearInterval(timer);
+
+    return () => {
+      clearInterval(timer);
+    };
   }, []);
 
   return (
@@ -97,26 +119,31 @@ export default function Crossings() {
           </div>
 
           <br />
+          {error && <Alert variant="danger">{error}</Alert>}
           <Alert show={showAlert} variant="success">
             Crossing Data Updated Successfully!
           </Alert>
 
           <div className="table-responsive">
-            <table className="table table-striped table-hover">
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Name</th>
-                  <th>Latitude</th>
-                  <th>Longitude</th>
-                  <th>Heading</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <ListCrossing crossings={crossings} deleteCrossings={deleteCrossings} />
-              </tbody>
-            </table>
+            {loading ? (
+              <div>Loading...</div>
+            ) : (
+              <table className="table table-striped table-hover">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Name</th>
+                    <th>Latitude</th>
+                    <th>Longitude</th>
+                    <th>Heading</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ListCrossing crossings={crossings} deleteCrossings={deleteCrossings} />
+                </tbody>
+              </table>
+            )}
           </div>
 
           <Modal show={show} onHide={handleClose}>

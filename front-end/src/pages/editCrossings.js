@@ -11,7 +11,7 @@ export default function EditCrossings({ id, onSubmit }) {
 
   const fetchData = async () => {
     try {
-      const res = await axios.get(`http://localhost:5000/api/${id}`);
+      const res = await axios.get(`https://caviar-api-qyyuck654a-et.a.run.app/api/crossing/${id}`);
       setCrossings(res.data.data);
     } catch (error) {
       console.log(error);
@@ -28,7 +28,7 @@ export default function EditCrossings({ id, onSubmit }) {
     };
 
     axios
-      .put(`http://localhost:5000/api/${id}`, data)
+      .put(`https://caviar-api-qyyuck654a-et.a.run.app/api/crossing/${id}`, data)
       .then((res) => {
         console.log(res.data.data);
         setCrossings(res.data.data);

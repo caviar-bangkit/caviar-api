@@ -14,7 +14,7 @@ export default function AddCrossings({ handleClose, handleDataUpdate }) {
       longitude: e.target.longitude.value,
       heading: e.target.heading.value
     };
-    axios.post("http://localhost:5000/api", data)
+    axios.post("https://caviar-api-qyyuck654a-et.a.run.app/api/crossing", data)
       .then(() => {
         // Call the handleDataUpdate function passed as a prop
         handleDataUpdate();
