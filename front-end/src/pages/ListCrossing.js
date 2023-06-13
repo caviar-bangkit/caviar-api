@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button, Modal, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { useParams } from "react-router";
 import EditForm from '../pages/editCrossings';
+import firebase from 'firebase/compat/app';
 
 export default function ListCrossings() {
     const [crossings, setCrossings] = useState([]);
@@ -43,16 +44,28 @@ export default function ListCrossings() {
     const handleEditFormSubmit = () => {
         console.log("Update successful!");
         handleClose();
-        fetchData();
+        fetchData(token);
     };
 
     function deleteCrossings(id) {
-        axios.delete(`https://caviar-api-qyyuck654a-et.a.run.app/api/crossing/${id}`, {
-            headers: {
-                Authorization: "Bearer " + token,
-            },
-        }).then(() => fetchData(token));
-    }
+        // Retrieve the access token
+        firebase.auth().currentUser.getIdToken(/* forceRefresh */ true)
+          .then(function(token) {
+            axios.delete(`https://caviar-api-qyyuck654a-et.a.run.app/api/crossing/${id}`, {
+              headers: {
+                Authorization: `Bearer ${token}`
+              },
+            }).then(() => {
+              fetchData(token); // Assuming fetchData is a function that retrieves data after deletion
+            }).catch((error) => {
+              console.log(error);
+              // Handle error
+            });
+          }).catch(function(error) {
+            console.log(error);
+            // Handle error
+          });
+      }
 
     return (
         <>
