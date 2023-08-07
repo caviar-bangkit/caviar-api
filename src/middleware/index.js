@@ -2,8 +2,13 @@ const firebase = require("firebase-admin");
 
 const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT;
 
+// check if service account is not set
+if (!serviceAccount) {
+  console.error("Firebase service account is not set");
+}
+
 firebase.initializeApp({
-  credential: firebase.credential.cert(JSON.parse(serviceAccount)),
+  credential: firebase.credential.cert(serviceAccount),
 });
 
 // if firebase admin is not initialized show error
