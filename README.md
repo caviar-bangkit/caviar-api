@@ -6,6 +6,10 @@ CAVIAR (Crosswalk Assistance App for the Visually Impaired Peoples) are an appli
 
 This repository contains the source code for the CAVIAR API. The API is built using Node.js, Express.js, MySQL
 
+## API Architecture
+
+![API Architecture](https://raw.githubusercontent.com/caviar-bangkit/caviar-api/main/CAVIAR%20API.png "API Architecture")
+
 ## API Documentation
 
 Postman Documentation: https://documenter.getpostman.com/view/24885247/2s93m4X3A1
